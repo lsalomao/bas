@@ -5,7 +5,7 @@ import shutil
 from app.processor import BoletoProcessor
 from app.config import Config
 
-app = FastAPI()
+app = FastAPI(title="BAS - API")
 config = Config()
 processor = BoletoProcessor(config)
 
@@ -40,5 +40,5 @@ def debug_texto(arquivo: str):
     return {"texto": processor.debug_extract_text(path)}
 
 @app.get("/")
-def inicio():    
+async def root():   
     return {"texto ": "API de processamento de boletos."}

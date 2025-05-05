@@ -62,7 +62,7 @@ class BoletoProcessor:
 
     def __init__(self, config: Config):
         self.config = config
-        print(f"Configuração: {self.config.__dict__}")
+        
         self.boletos_extraidos = []
 
     def extract_value_from_barcode(self, codigo_barras):

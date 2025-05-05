@@ -2,19 +2,30 @@ version: '3.9'
 
 services:
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 2555
     ports:
-      - "2550:2550"
+      - "2555:2555"
     volumes:
       - .:/app
+      - anexos:/app/anexos
     environment:
-      - PYTHONUNBUFFERED=1
-    command: uvicorn main:app --host 0.0.0.0 --port 2550
-    networks:
-      - app-network
+      - EMAIL_CHECK_INTERVAL=${EMAIL_CHECK_INTERVAL}
+      - LOGIN_APP_EMAIL=${LOGIN_APP_EMAIL}
+      - PASS_APP_EMAIL=${PASS_APP_EMAIL}
+      - SERVER_IMAP=${SERVER_IMAP}
 
-networks:
-  app-network:
-    driver: bridge
+  worker:
+    build: .
+    command: python run_worker.py
+    volumes:
+      - .:/app
+      - anexos:/app/anexos
+    environment:
+      - EMAIL_CHECK_INTERVAL=${EMAIL_CHECK_INTERVAL}
+      - LOGIN_APP_EMAIL=${LOGIN_APP_EMAIL}
+      - PASS_APP_EMAIL=${PASS_APP_EMAIL}
+      - SERVER_IMAP=${SERVER_IMAP}
+
+volumes:
+  anexos:
